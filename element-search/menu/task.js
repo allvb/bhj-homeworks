@@ -1,12 +1,12 @@
-const arrayMenu__item = Array.from(document.getElementsByClassName('menu__item'));
+const arrayMenuItem = Array.from(document.getElementsByClassName('menu__item'));
 let indexOfActiveMenu;//индекс открытого меню
 
-for (let i = 0; i < arrayMenu__item.length; i++) {
-    const menu = arrayMenu__item[i].querySelector('.menu');
+for (let i = 0; i < arrayMenuItem.length; i++) {
+    const menu = arrayMenuItem[i].querySelector('.menu');
     if (menu) {
         arrayMenu__item[i].querySelector('.menu__link').onclick = function() {
             if (indexOfActiveMenu && indexOfActiveMenu !== i) {//проверяем есть ли другое открытое меню
-                const activeMenu = arrayMenu__item[indexOfActiveMenu].querySelector('.menu');
+                const activeMenu = arrayMenuItem[indexOfActiveMenu].querySelector('.menu');
                 activeMenu.className = 'menu menu_sub';//закрываем другое открытое меню
                 indexOfActiveMenu = undefined;
             }
