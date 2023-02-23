@@ -81,12 +81,16 @@ class Autocomplete {
         value: 'Содержимое атрибута value'
       }
     */
-    return [
-      {
-        text: 'Чубакка',
-        value: '1'
-      }
-    ];
+    const spisokOut = [];
+    const spisok = [...this.input.options].filter(item => item.textContent.includes(text));
+    for (const item of spisok) { //из полученного списка совпадающего с 'text'
+                                 //составлям новый список с нужными свойствами
+      const obj = {};
+      obj.text = item.text;
+      obj.value = item.value;
+      spisokOut.push(obj);
+    }
+    return spisokOut; 
   }
 }
 
