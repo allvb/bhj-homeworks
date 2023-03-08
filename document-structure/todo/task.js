@@ -1,4 +1,4 @@
-const form = document.querySelector('.tasks__control'); //форма
+const form = document.getElementById('tasks__form'); //форма
 const tasksList = document.getElementById('tasks__list'); //контейнер с задачами
 
 function addTask () { //функция создания и добавления новой задачи
@@ -15,7 +15,8 @@ function addTask () { //функция создания и добавления 
     });
 }
 
-form.querySelector('.tasks__add').addEventListener('click', () => {
+form.addEventListener('submit', (e) => {
+    e.preventDefault();
     if (form.querySelector('.tasks__input').value) {
         addTask();
     }

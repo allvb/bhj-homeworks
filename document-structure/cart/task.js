@@ -36,6 +36,10 @@ for (const btn of addButtonToCart) {
             return;
         }
 
+        if (productId.querySelector('.product__quantity-value').textContent === '0') {
+            return;
+        }
+
         for (const item of productsInCart) { //есть ли продукт уже в корзине
             if (item.dataset.id === productId.dataset.id) {
                 let sameProduct = [...productsInCart].filter((item) => item.dataset.id === productId.dataset.id);
