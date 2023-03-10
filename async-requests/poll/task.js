@@ -71,7 +71,14 @@ function addQuestion(r) {//функция отрисовки вопроса и �
 response(xhr);//выполняем запрос
 
 xhr.addEventListener('readystatechange', function() { //подписка по изменению статуса
-    if(xhr.readyState === xhr.DONE) {
-        addQuestion(xhr.response);//передаем объект ответа
+    try {
+        if (xhr.status != 200) {
+          alert(`Ошибка ${xhr.status}: ${xhr.statusText}`);
+        }
+    } catch(err) {
+        alert("Запрос не удался");
     }
-})
+    if(xhr.readyState === xhr.DONE) {
+        addQuestion(xhr.response); //передаем объект ответа
+    }
+});
