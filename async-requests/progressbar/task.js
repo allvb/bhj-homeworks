@@ -4,6 +4,7 @@ const progress = document.getElementById('progress');
 
 form.addEventListener('submit', (e) => {
     e.preventDefault();
+
     const xhr = new XMLHttpRequest();
 
     xhr.upload.onprogress = function(event) {
