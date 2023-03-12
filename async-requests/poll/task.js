@@ -1,31 +1,35 @@
-const xhr = new XMLHttpRequest();
-
-function response(i) {
-    const newXhr = new XMLHttpRequest();
-    xhr.open('GET', 'https://students.netoservices.ru/nestjs-backend/poll');
+function response(method, url, header, id, i) { // функция создания запроса
+    const xhr = new XMLHttpRequest();
+    xhr.open(method, url);
     xhr.responseType = 'json';
-    xhr.send();
+    xhr.setRequestHeader('Content-type', header);
+    let voteAnswer = `vote=${id}&answer=${i}`;
+    xhr.send(voteAnswer);
+    return xhr;
+}
+
+function drawing(tag, className, text) { //функция отрисовки элемента
+    const element = document.createElement(tag);
+    element.classList.add(className);
+    element.setAttribute('id', className);
+    element.textContent = text;
+    // document.querySelector('.poll').append(element);
+    return element;
 }
 
 function responseResult(id, i) {//функци запроса статистики
-    const newXhr = new XMLHttpRequest();//создаем новый запрос
-    newXhr.open('POST', 'https://students.netoservices.ru/nestjs-backend/poll');
-    newXhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    newXhr.responseType = 'json';
-    newXhr.send(`vote=${id}&answer=${i}`);
+
+    xhr = response('POST', 'https://students.netoservices.ru/nestjs-backend/poll', 'application/x-www-form-urlencoded', id, i);
 
     document.getElementById('poll__answers').remove();//удаляем кнопки
 
-    const answerStat = document.createElement('div');
-    answerStat.classList.add('poll__answers');
-    answerStat.setAttribute('id', 'poll__answers');
+    const answerStat = drawing('div', 'poll_answers'); //добавляем блок для статистки отвтов
     document.querySelector('.poll').append(answerStat);
     
-    newXhr.addEventListener('readystatechange', function() {
-        if(newXhr.readyState === newXhr.DONE) {    
-            for (let item of newXhr.response.stat) {
-                const answerString = document.createElement('div');
-                answerString.classList.add('poll__answer__string');
+    xhr.addEventListener('readystatechange', function() { 
+        if(xhr.readyState === xhr.DONE) {    
+            for (let item of xhr.response.stat) {
+                const answerString = drawing('div', 'poll__answer__string');
                 answerStat.append(answerString);
 
                 const responceAnswer = document.createElement('div');
@@ -42,23 +46,17 @@ function responseResult(id, i) {//функци запроса статистик
     });
 }
 
-function addQuestion(r) {//функция отрисовки вопроса и кнопок ответа
-    const question = document.createElement('div');
-    question.classList.add('poll__title');
-    question.setAttribute('id', 'poll__title');
-    question.textContent = r.data.title;
-    document.querySelector('.poll').append(question);
-
-    const answer = document.createElement('div');
-    answer.classList.add('poll__answers');
-    answer.classList.add('poll__answers_active')
-    answer.setAttribute('id', 'poll__answers');
+function addQuestion(r) {//функция отрисовки вопроса и кнопок 
+    document.querySelector('.poll').append(drawing('div', 'poll__title', r.data.title)); //пишем вопрос
+    const answer = drawing('div', 'poll__answers'); // создаём блок кнопок
     document.querySelector('.poll').append(answer);
 
     for (let key of Object.keys(r.data.answers)) {//для каждого ответа рисуем кнопку
-        const button = document.createElement('button');
-        button.classList.add('poll__answer');
-        button.textContent = r.data.answers[key];
+        
+        const button = drawing('button', 'poll__answer', r.data.answers[key]);
+        // document.createElement('button');
+        // button.classList.add('poll__answer');
+        // button.textContent = r.data.answers[key];
         answer.append(button);
 
         button.onclick = () => {//обработчик клика по кнопке
@@ -68,7 +66,7 @@ function addQuestion(r) {//функция отрисовки вопроса и �
     }
 }
 
-response(xhr);//выполняем запрос
+let xhr = response('GET', 'https://students.netoservices.ru/nestjs-backend/poll', '');//выполняем запрос
 
 xhr.addEventListener('readystatechange', function() { //подписка по изменению статуса
     try {
