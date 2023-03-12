@@ -6,7 +6,7 @@ editor.addEventListener('input', () => {
 
 document.getElementById('clear').addEventListener('click', () => {
     editor.value = '';
-    localStorage.clear();
+    delete localStorage.editor;
 });
 
 if (localStorage.editor) {
